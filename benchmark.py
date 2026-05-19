@@ -115,6 +115,12 @@ def main() -> None:
         r = medir_soma_todos(c)
         print(f"| `{c}` | {r['solucoes']} | {r['iteracoes']} | {r['instrucoes']} | {r['tempo_s']:.6f} |")
 
+    print("\n## soma zero - conjuntos grandes (primeira solução)\n")
+    print("| tamanho | soluções | iterações | instruções | tempo (s) |")
+    print("|---------|----------|-----------|------------|-----------|")
+    for t in [50, 100, 500, 1000]:
+        print(linha_md(medir_soma_um(gerar_aleatorio(t))))
+
 
 if __name__ == "__main__":
     main()
