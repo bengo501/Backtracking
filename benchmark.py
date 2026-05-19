@@ -1,19 +1,16 @@
 from __future__ import annotations
-
 import random
 import time
-
 from nrainhas import metricas as metricas_rainhas
 from nrainhas import resolver_todas, resolver_um
 from soma_subconjuntos import metricas as metricas_soma
 from soma_subconjuntos import soma_zero_todos, soma_zero_um
 
-
-def medir_rainhas_um(n: int) -> dict:
+def medir_rainhas_um(n: int) -> dict: #mede o tempo de execução para uma solução        
     m = metricas_rainhas()
-    t0 = time.perf_counter()
+    t0 = time.perf_counter() #inicia o cronômetro
     sol = resolver_um(n, m)  #primeira solução
-    tempo = time.perf_counter() - t0
+    tempo = time.perf_counter() - t0 #tempo de execução
     return {
         "n": n,
         "solucoes": 1 if sol else 0,
@@ -22,10 +19,9 @@ def medir_rainhas_um(n: int) -> dict:
         "tempo_s": tempo,
     }
 
-
-def medir_rainhas_todas(n: int) -> dict:
-    m = metricas_rainhas()
-    t0 = time.perf_counter()
+def medir_rainhas_todas(n: int) -> dict: #mede o tempo de execução para todas as soluções
+    m = metricas_rainhas() #mede o tempo de execução para uma solução
+    t0 = time.perf_counter() #inicia o cronômetro
     sols = resolver_todas(n, m)  #todas as soluções
     tempo = time.perf_counter() - t0
     return {
@@ -36,12 +32,11 @@ def medir_rainhas_todas(n: int) -> dict:
         "tempo_s": tempo,
     }
 
-
 def medir_soma_um(conjunto: list[int]) -> dict:
-    m = metricas_soma()
-    t0 = time.perf_counter()
-    sol = soma_zero_um(conjunto, m)
-    tempo = time.perf_counter() - t0
+    m = metricas_soma() #mede o tempo de execução para uma solução
+    t0 = time.perf_counter() #inicia o cronômetro
+    sol = soma_zero_um(conjunto, m) #solução para o conjunto
+    tempo = time.perf_counter() - t0 #tempo de execução
     return {
         "n": len(conjunto),
         "solucoes": 1 if sol else 0,
@@ -50,8 +45,7 @@ def medir_soma_um(conjunto: list[int]) -> dict:
         "tempo_s": tempo,
     }
 
-
-def medir_soma_todos(conjunto: list[int]) -> dict:
+def medir_soma_todos(conjunto: list[int]) -> dict: #mede o tempo de execução para todas as soluções
     m = metricas_soma()
     t0 = time.perf_counter()
     sols = soma_zero_todos(conjunto, m)
@@ -65,7 +59,7 @@ def medir_soma_todos(conjunto: list[int]) -> dict:
     }
 
 
-def gerar_aleatorio(tamanho: int) -> list[int]:
+def gerar_aleatorio(tamanho: int) -> list[int]: #gera um conjunto aleatório
     random.seed(42)
     if tamanho < 2:
         return [1, -1][:tamanho]
@@ -78,30 +72,25 @@ def gerar_sem_solucao(tamanho: int) -> list[int]:
     return [random.randint(1, 100) for _ in range(tamanho)]  #só positivos
 
 
-def linha_md(r: dict) -> str:
+def linha_md(r: dict) -> str: #formata a linha da tabela
     return (
         f"| {r['n']} | {r['solucoes']} | {r['iteracoes']} | "
         f"{r['instrucoes']} | {r['tempo_s']:.6f} |"
     )
-
-
-def cabecalho() -> str:
+ 
+def cabecalho() -> str: #formata o cabeçalho da tabela
     return "| n | soluções | iterações | instruções | tempo (s) |\n|---|----------|-----------|------------|-----------|"
 
-
-def main() -> None:
+def main() -> None: #função principal
     print("# resultados do benchmark\n")
-
     print("## n-rainhas - primeira solução\n")
     print(cabecalho())
-    for n in [4, 6, 8, 10, 12]:
+    for n in [4, 6, 8, 10, 12]: #casos de teste automáticos
         print(linha_md(medir_rainhas_um(n)))
-
     print("\n## n-rainhas - todas as soluções\n")
     print(cabecalho())
-    for n in [4, 6, 7, 8]:
+    for n in [4, 6, 7, 8]: #casos de teste automáticos
         print(linha_md(medir_rainhas_todas(n)))
-
     print("\n## soma zero - primeira solução\n")
     print(cabecalho())
     casos = [[-7, -3, -2, 5, 8], [1, 2, 3, 4, 5, 10], [-5, 2, 3, -1, 1]]
@@ -114,13 +103,11 @@ def main() -> None:
     for c in casos:
         r = medir_soma_todos(c)
         print(f"| `{c}` | {r['solucoes']} | {r['iteracoes']} | {r['instrucoes']} | {r['tempo_s']:.6f} |")
-
-    print("\n## soma zero - conjuntos grandes (primeira solução)\n")
+    print("\n## soma zero - conjuntos grandes (primeira solução)\n") #formata a tabela de conjuntos grandes
     print("| tamanho | soluções | iterações | instruções | tempo (s) |")
     print("|---------|----------|-----------|------------|-----------|")
     for t in [50, 100, 500, 1000]:
-        print(linha_md(medir_soma_um(gerar_aleatorio(t))))
-
+        print(linha_md(medir_soma_um(gerar_aleatorio(t)))) 
 
 if __name__ == "__main__":
-    main()
+    main() 
