@@ -1,17 +1,11 @@
-"""
-problema das n-rainhas - backtracking.
-uma solução (resolver_um) e todas as soluções (resolver_todas).
-"""
-
 from __future__ import annotations
-
 from dataclasses import dataclass
 
 
 @dataclass
 class metricas:
-    iteracoes: int = 0
-    instrucoes: int = 0
+    iteracoes: int = 0  #conta chamadas do backtrack
+    instrucoes: int = 0  #conta operações básicas
 
     def zerar(self) -> None:
         self.iteracoes = 0
@@ -23,32 +17,31 @@ def coluna_segura(
 ) -> bool:
     for i in range(linha):
         if m:
-            m.instrucoes += 2
-        if tabuleiro[i] == coluna:
+            m.instrucoes += 2  #duas comparações por rainha anterior
+        if tabuleiro[i] == coluna:  #mesma coluna
             return False
-        if abs(tabuleiro[i] - coluna) == abs(i - linha):
+        if abs(tabuleiro[i] - coluna) == abs(i - linha):  #mesma diagonal
             return False
     return True
 
 
 def resolver_um(n: int, m: metricas | None = None) -> list[int] | None:
-    """primeira solução válida; tabuleiro[i] = coluna na linha i."""
-    tabuleiro = [-1] * n
+    tabuleiro = [-1] * n  #tabuleiro[i] = coluna da rainha na linha i
 
     def backtrack(linha: int) -> bool:
         if m:
             m.iteracoes += 1
             m.instrucoes += 1
-        if linha == n:
+        if linha == n:  #todas as linhas preenchidas
             return True
         for coluna in range(n):
             if m:
                 m.instrucoes += 1
             if coluna_segura(tabuleiro, linha, coluna, m):
                 tabuleiro[linha] = coluna
-                if backtrack(linha + 1):
-                    return True
-                tabuleiro[linha] = -1
+                if backtrack(linha + 1):  #próxima linha
+                    return True  #para na primeira solução
+                tabuleiro[linha] = -1  #backtrack
         return False
 
     if backtrack(0):
@@ -57,7 +50,6 @@ def resolver_um(n: int, m: metricas | None = None) -> list[int] | None:
 
 
 def resolver_todas(n: int, m: metricas | None = None) -> list[list[int]]:
-    """todas as soluções válidas."""
     solucoes: list[list[int]] = []
     tabuleiro = [-1] * n
 
@@ -66,7 +58,7 @@ def resolver_todas(n: int, m: metricas | None = None) -> list[list[int]]:
             m.iteracoes += 1
             m.instrucoes += 1
         if linha == n:
-            solucoes.append(tabuleiro.copy())
+            solucoes.append(tabuleiro.copy())  #salva solução e continua
             return
         for coluna in range(n):
             if m:

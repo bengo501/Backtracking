@@ -1,8 +1,3 @@
-"""
-gera tabelas de iteracoes, instrucoes e tempo para os quatro algoritmos.
-execute: python benchmark.py
-"""
-
 from __future__ import annotations
 
 import random
@@ -17,7 +12,7 @@ from soma_subconjuntos import soma_zero_todos, soma_zero_um
 def medir_rainhas_um(n: int) -> dict:
     m = metricas_rainhas()
     t0 = time.perf_counter()
-    sol = resolver_um(n, m)
+    sol = resolver_um(n, m)  #primeira solução
     tempo = time.perf_counter() - t0
     return {
         "n": n,
@@ -31,7 +26,7 @@ def medir_rainhas_um(n: int) -> dict:
 def medir_rainhas_todas(n: int) -> dict:
     m = metricas_rainhas()
     t0 = time.perf_counter()
-    sols = resolver_todas(n, m)
+    sols = resolver_todas(n, m)  #todas as soluções
     tempo = time.perf_counter() - t0
     return {
         "n": n,
@@ -75,12 +70,12 @@ def gerar_aleatorio(tamanho: int) -> list[int]:
     if tamanho < 2:
         return [1, -1][:tamanho]
     restante = [random.randint(-100, 100) for _ in range(tamanho - 2)]
-    return [42, -42] + restante
+    return [42, -42] + restante  #par oposto facilita achar solução rápida
 
 
 def gerar_sem_solucao(tamanho: int) -> list[int]:
     random.seed(42)
-    return [random.randint(1, 100) for _ in range(tamanho)]
+    return [random.randint(1, 100) for _ in range(tamanho)]  #só positivos
 
 
 def linha_md(r: dict) -> str:
@@ -91,7 +86,7 @@ def linha_md(r: dict) -> str:
 
 
 def cabecalho() -> str:
-    return "| entrada (n) | soluções | iterações | instruções | tempo (s) |\n|-------------|----------|-----------|------------|-----------|"
+    return "| n | soluções | iterações | instruções | tempo (s) |\n|---|----------|-----------|------------|-----------|"
 
 
 def main() -> None:
@@ -107,38 +102,18 @@ def main() -> None:
     for n in [4, 6, 7, 8]:
         print(linha_md(medir_rainhas_todas(n)))
 
-    print("\n## soma zero - primeira solução (exemplos fixos)\n")
+    print("\n## soma zero - primeira solução\n")
     print(cabecalho())
-    casos = [
-        [-7, -3, -2, 5, 8],
-        [1, 2, 3, 4, 5, 10],
-        [-5, 2, 3, -1, 1],
-    ]
+    casos = [[-7, -3, -2, 5, 8], [1, 2, 3, 4, 5, 10], [-5, 2, 3, -1, 1]]
     for c in casos:
         r = medir_soma_um(c)
-        r["n"] = str(c)[:30] + "..." if len(str(c)) > 30 else str(c)
         print(f"| `{c}` | {r['solucoes']} | {r['iteracoes']} | {r['instrucoes']} | {r['tempo_s']:.6f} |")
 
-    print("\n## soma zero - primeira solução (|conjunto| variável, par 42/-42)\n")
-    print(cabecalho())
-    for t in [10, 20, 50, 100, 500]:
-        print(linha_md(medir_soma_um(gerar_aleatorio(t))))
-
-    print("\n## soma zero - primeira solução (pior caso: só positivos)\n")
-    print(cabecalho())
-    for t in [10, 15, 18, 20]:
-        print(linha_md(medir_soma_um(gerar_sem_solucao(t))))
-
-    print("\n## soma zero - todas as soluções (exemplos fixos)\n")
+    print("\n## soma zero - todas as soluções\n")
     print(cabecalho())
     for c in casos:
         r = medir_soma_todos(c)
         print(f"| `{c}` | {r['solucoes']} | {r['iteracoes']} | {r['instrucoes']} | {r['tempo_s']:.6f} |")
-
-    print("\n## soma zero - todas as soluções (|conjunto| variável)\n")
-    print(cabecalho())
-    for t in [8, 10, 12, 15, 18]:
-        print(linha_md(medir_soma_todos(gerar_aleatorio(t))))
 
 
 if __name__ == "__main__":
