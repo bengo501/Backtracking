@@ -39,7 +39,7 @@ def resolver_um(n: int, m: metricas | None = None) -> list[int] | None: #resolve
                 tabuleiro[linha] = -1  #backtrack
         return False
 
-    if backtrack(0):
+    if backtrack(0): #encontrou uma solução
         return tabuleiro
     return None
 

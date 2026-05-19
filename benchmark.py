@@ -24,15 +24,15 @@ def medir_rainhas_todas(n: int) -> dict: #mede o tempo de execução para todas 
     t0 = time.perf_counter() #inicia o cronômetro
     sols = resolver_todas(n, m)  #todas as soluções
     tempo = time.perf_counter() - t0
-    return {
-        "n": n,
+    return { 
+        "n": n, 
         "solucoes": len(sols),
         "iteracoes": m.iteracoes,
         "instrucoes": m.instrucoes,
         "tempo_s": tempo,
     }
 
-def medir_soma_um(conjunto: list[int]) -> dict:
+def medir_soma_um(conjunto: list[int]) -> dict: #mede o tempo de execução para uma solução  
     m = metricas_soma() #mede o tempo de execução para uma solução
     t0 = time.perf_counter() #inicia o cronômetro
     sol = soma_zero_um(conjunto, m) #solução para o conjunto
@@ -46,10 +46,10 @@ def medir_soma_um(conjunto: list[int]) -> dict:
     }
 
 def medir_soma_todos(conjunto: list[int]) -> dict: #mede o tempo de execução para todas as soluções
-    m = metricas_soma()
-    t0 = time.perf_counter()
-    sols = soma_zero_todos(conjunto, m)
-    tempo = time.perf_counter() - t0
+    m = metricas_soma() #mede o tempo de execução para uma solução
+    t0 = time.perf_counter() #inicia o cronômetro
+    sols = soma_zero_todos(conjunto, m) #todas as soluções
+    tempo = time.perf_counter() - t0 #tempo de execução
     return {
         "n": len(conjunto),
         "solucoes": len(sols),
@@ -60,15 +60,15 @@ def medir_soma_todos(conjunto: list[int]) -> dict: #mede o tempo de execução p
 
 
 def gerar_aleatorio(tamanho: int) -> list[int]: #gera um conjunto aleatório
-    random.seed(42)
+    random.seed(42) #seed para gerar o mesmo conjunto aleatório
     if tamanho < 2:
         return [1, -1][:tamanho]
     restante = [random.randint(-100, 100) for _ in range(tamanho - 2)]
     return [42, -42] + restante  #par oposto facilita achar solução rápida
 
 
-def gerar_sem_solucao(tamanho: int) -> list[int]:
-    random.seed(42)
+def gerar_sem_solucao(tamanho: int) -> list[int]: #gera um conjunto sem solução
+    random.seed(42) #seed para gerar o mesmo conjunto sem solução
     return [random.randint(1, 100) for _ in range(tamanho)]  #só positivos
 
 

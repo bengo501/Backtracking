@@ -38,40 +38,40 @@ def soma_zero_um(conjunto: list[int], m: metricas | None = None) -> list[int] | 
             return True
         return False
 
-    if backtrack(0, 0):
+    if backtrack(0, 0): #encontrou uma solução
         return escolhidos[:]
     return None
 
 def soma_zero_todos(conjunto: list[int], m: metricas | None = None) -> list[list[int]]: #resolve o problema da soma zero para todas as soluções
-    _ajustar_limite_recursao(len(conjunto))
+    _ajustar_limite_recursao(len(conjunto)) #ajusta o limite de recursão
     resultados: list[list[int]] = []
     escolhidos: list[int] = []
     vistos: set[tuple[int, ...]] = set()  #evita repetir o mesmo subconjunto
 
-    def backtrack(indice: int, soma: int) -> None:
-        if m:
+    def backtrack(indice: int, soma: int) -> None: #backtracking para encontrar todas as soluções   
+        if m: #mede o tempo de execução
             m.iteracoes += 1
             m.instrucoes += 1
-        if soma == 0 and escolhidos:
+        if soma == 0 and escolhidos: #achou subconjunto válido
             chave = tuple(sorted(escolhidos))
-            if chave not in vistos:
+            if chave not in vistos: #evita repetir o mesmo subconjunto
                 vistos.add(chave)
                 resultados.append(escolhidos.copy())
 
-        if indice == len(conjunto):
+        if indice == len(conjunto): #fim da lista
             return
 
         elemento = conjunto[indice]
-        if m:
+        if m: #mede o tempo de execução
             m.instrucoes += 1
 
         escolhidos.append(elemento)
-        backtrack(indice + 1, soma + elemento)
+        backtrack(indice + 1, soma + elemento) #explora incluir e não incluir
         escolhidos.pop()
         backtrack(indice + 1, soma)  #explora incluir e não incluir
 
-    backtrack(0, 0)
-    return resultados
+    backtrack(0, 0) #encontrou todas as soluções
+    return resultados #retorna todas as soluções
 
 def formatar_conjunto(valores: list[int]) -> str: #formata o conjunto para exibição
     return "{" + ", ".join(str(v) for v in valores) + "}"
@@ -85,15 +85,15 @@ def main() -> None: #função principal
 
     print("=== soma zero: primeira solução ===\n")
     for conjunto in casos:
-        m = metricas()
-        sub = soma_zero_um(conjunto, m)
+        m = metricas() #mede o tempo de execução
+        sub = soma_zero_um(conjunto, m) #primeira solução
         print(f"entrada: {formatar_conjunto(conjunto)}")
         print(f"solucao: {formatar_conjunto(sub) if sub else 'nenhuma'}")
         print(f"iteracoes: {m.iteracoes} | instrucoes: {m.instrucoes}\n")
     print("=== soma zero: todas as soluções ===\n")
     for conjunto in casos: #exemplos do enunciado
-        m = metricas()
-        sols = soma_zero_todos(conjunto, m)
+        m = metricas() #mede o tempo de execução
+        sols = soma_zero_todos(conjunto, m) #todas as soluções
         print(f"entrada: {formatar_conjunto(conjunto)}")
         print(f"total: {len(sols)} | iteracoes: {m.iteracoes} | instrucoes: {m.instrucoes}")
         for i, sub in enumerate(sols, start=1):
